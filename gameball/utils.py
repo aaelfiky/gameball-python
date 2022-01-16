@@ -1,7 +1,9 @@
 import hashlib
 from gameball.exceptions.gameball_exception import GameballException, AuthenticationError
 import gameball
-from datetime import datetime, timezone
+# from datetime import datetime, timezone // DEPRECATED
+from datetime import datetime
+import pytz
 
 
 # Mechanism of hashing the body to include transaction key in case of transaction requests
@@ -24,6 +26,16 @@ def hash_body(player_unique_id = '', transaction_time = '', amount = ''):
 
 # Mechanism of encoding date in the way Gameball APIs accepts it
 def encode_date(date_time):
-    date_time_utc = date_time.replace(tzinfo=timezone.utc)
+    date_time_utc = date_time.replace(tzinfo=pytz.utc)
     date_time_iso = date_time_utc.isoformat()
     return(str(date_time_iso).replace('+00:00', 'Z'))
+
+
+def handle_channel_merging(obj, email, mobile):
+    if (email != None):
+        obj.email = email
+    
+    if (mobile != None):
+        obj.mobile = mobile
+        
+    return obj
